@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brook Green Florist — London</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F7F3EE;
+      --white: #FDFCFB;
+      --black: #0C0C0A;
+      --charcoal: #1E1E1A;
+      --sage: #7E9172;
+      --sage-light: #A8BC9D;
+      --sage-dark: #5A6E50;
+      --warm-gray: #8A8780;
+      --border: rgba(12,12,10,0.1);
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.83, 0, 0.17, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom Cursor */
+    #cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 8px; height: 8px;
+      background: var(--charcoal);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, background 0.3s, width 0.3s var(--ease-out), height 0.3s var(--ease-out);
+    }
+    #cursor-follower {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(12,12,10,0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.35s var(--ease-out), opacity 0.3s, border-color 0.3s, width 0.4s var(--ease-out), height 0.4s var(--ease-out);
+    }
+    body.cursor-hover #cursor { width: 12px; height: 12px; background: var(--sage); }
+    body.cursor-hover #cursor-follower { width: 56px; height: 56px; border-color: var(--sage); opacity: 0.6; }
+    body.cursor-text #cursor { width: 2px; height: 24px; border-radius: 1px; }
+    body.cursor-text #cursor-follower { opacity: 0; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 2px; }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 52px;
+      mix-blend-mode: normal;
+      transition: padding 0.5s var(--ease-out), background 0.5s;
+    }
+    nav.scrolled {
+      padding: 18px 52px;
+      background: rgba(247,243,238,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--sage); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--sage);
+      transition: width 0.4s var(--ease-out);
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--charcoal);
+      padding: 10px 24px;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-cta:hover { background: var(--sage); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 140px 52px 80px 52px;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s var(--ease-out) 0.3s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--sage);
+    }
+    .hero-h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(3.5rem, 6vw, 6rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1.1s var(--ease-out) 0.5s forwards;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--sage);
+    }
+    .hero-sub {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--warm-gray);
+      max-width: 340px;
+      margin-bottom: 52px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s var(--ease-out) 0.7s forwards;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s var(--ease-out) 0.9s forwards;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--charcoal);
+      color: var(--white);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.4s;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--sage);
+      transform: translateX(-101%);
+      transition: transform 0.5s var(--ease-out);
+    }
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-ghost {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--charcoal);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.6;
+      transition: opacity 0.3s, gap 0.3s;
+    }
+    .btn-ghost:hover { opacity: 1; gap: 16px; }
+    .btn-ghost svg { transition: transform 0.3s; }
+    .btn-ghost:hover svg { transform: translateX(4px); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-image-wrap {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .hero-image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.08);
+      animation: heroZoom 8s var(--ease-out) forwards;
+    }
+    .hero-image-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--cream) 0%, transparent 40%);
+    }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 52px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      opacity: 0;
+      animation: fadeUp 1s var(--ease-out) 1.4s forwards;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--sage), transparent);
+      animation: scrollPulse 2s ease-in-out 2s infinite;
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      overflow: hidden;
+      background: var(--charcoal);
+      padding: 18px 0;
+      position: relative;
+      z-index: 2;
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 24s linear infinite;
+    }
+    .marquee-track span {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--cream);
+      opacity: 0.5;
+      padding: 0 40px;
+    }
+    .marquee-track span.dot {
+      color: var(--sage-light);
+      opacity: 1;
+      font-style: normal;
+      font-size: 0.5rem;
+      padding: 0 16px;
+      vertical-align: middle;
+    }
+
+    /* ABOUT */
+    #about {
+      display: grid;
+      grid-template-columns: 52% 48%;
+      height: 100vh;
+      min-height: 640px;
+      position: relative;
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    /* Collage */
+    .about-collage {
+      position: relative;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 58% 42%;
+      grid-template-rows: 60% 40%;
+      gap: 6px;
+      overflow: hidden;
+      height: 100%;
+    }
+    .about-ci {
+      overflow: hidden;
+      position: relative;
+      background: var(--sage-dark);
+    }
+    .about-ci img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 1.1s var(--ease-out);
+    }
+    .about-ci:hover img { transform: scale(1.05); }
+    /* Subtle dark vignette on images */
+    .about-ci::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(12,12,10,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Image A — tall, spans both rows */
+    .about-ci--a {
+      grid-column: 1;
+      grid-row: 1 / 3;
+    }
+    /* Image B — top right */
+    .about-ci--b {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    /* Image C — bottom right */
+    .about-ci--c {
+      grid-column: 2;
+      grid-row: 2;
+      background: var(--charcoal);
+    }
+    .about-ci-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      z-index: 0;
+    }
+    .about-ci--c img { position: absolute; inset: 0; z-index: 1; }
+    .about-ci-ql {
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      color: var(--sage-light);
+      line-height: 0.8;
+      margin-bottom: 12px;
+      display: block;
+      opacity: 0.6;
+    }
+    .about-ci-fallback p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--cream);
+      line-height: 1.5;
+      opacity: 0.7;
+    }
+
+    /* Floating label card */
+    .about-badge {
+      position: absolute;
+      bottom: 40px;
+      right: -24px;
+      background: var(--charcoal);
+      color: var(--cream);
+      padding: 22px 28px;
+      z-index: 4;
+      box-shadow: 0 24px 48px rgba(12,12,10,0.3);
+      min-width: 160px;
+    }
+    .about-badge-num {
+      font-family: var(--font-serif);
+      font-size: 2.4rem;
+      font-weight: 300;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .about-badge-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage-light);
+    }
+
+    /* Vertical year strip */
+    .about-year {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%) rotate(180deg);
+      writing-mode: vertical-rl;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white);
+      opacity: 0.7;
+      z-index: 5;
+      mix-blend-mode: difference;
+    }
+
+    .about-content {
+      padding: 100px 80px 100px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .about-pullquote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--charcoal);
+      border-left: 2px solid var(--sage);
+      padding-left: 22px;
+      margin: 28px 0 32px;
+      max-width: 380px;
+    }
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-label::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--sage);
+    }
+    .section-h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--charcoal);
+      margin-bottom: 28px;
+    }
+    .section-h2 em { font-style: italic; color: var(--sage); }
+    .about-text {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: var(--warm-gray);
+      margin-bottom: 20px;
+      max-width: 400px;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 36px;
+    }
+    .stat {
+      padding-right: 20px;
+    }
+    .stat:not(:last-child) {
+      border-right: 1px solid var(--border);
+      margin-right: 20px;
+    }
+    .stat-num {
+      font-family: var(--font-serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+    }
+
+    /* COLLECTIONS */
+    #collections {
+      padding: 120px 52px;
+      background: var(--white);
+    }
+    .collections-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 64px;
+    }
+    .collections-header .section-h2 { margin-bottom: 0; }
+    .view-all {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--charcoal);
+      transition: color 0.3s, border-color 0.3s, gap 0.3s;
+    }
+    .view-all:hover { color: var(--sage); border-color: var(--sage); gap: 16px; }
+
+    .collections-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 2px;
+    }
+    .collection-item {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+    }
+    .collection-item:first-child {
+      grid-row: 1 / 3;
+    }
+    .collection-item-inner {
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      min-height: 280px;
+    }
+    .collection-item:first-child .collection-item-inner { min-height: 560px; }
+
+    .collection-bg {
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.9s var(--ease-out);
+    }
+    .collection-item:hover .collection-bg { transform: scale(1.06); }
+
+    .collection-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(12,12,10,0.75) 0%, transparent 50%);
+      transition: opacity 0.4s;
+    }
+    .collection-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 32px;
+      transform: translateY(8px);
+      transition: transform 0.4s var(--ease-out);
+    }
+    .collection-item:hover .collection-info { transform: translateY(0); }
+    .collection-cat {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage-light);
+      margin-bottom: 8px;
+    }
+    .collection-name {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .collection-item:first-child .collection-name { font-size: 2.6rem; }
+    .collection-arrow {
+      position: absolute;
+      top: 28px; right: 28px;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.4s, transform 0.4s var(--ease-out), background 0.3s;
+    }
+    .collection-item:hover .collection-arrow { opacity: 1; transform: scale(1); }
+    .collection-arrow:hover { background: var(--sage); border-color: var(--sage); }
+
+    /* PROCESS */
+    #process {
+      padding: 120px 52px;
+      background: var(--cream);
+    }
+    .process-header {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 80px;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 1px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .step {
+      padding: 0 32px;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .step-num {
+      width: 72px; height: 72px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 300;
+      background: var(--cream);
+      color: var(--charcoal);
+      transition: background 0.4s, border-color 0.4s, color 0.4s;
+    }
+    .step:hover .step-num {
+      background: var(--sage);
+      border-color: var(--sage);
+      color: var(--white);
+    }
+    .step-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+      color: var(--charcoal);
+    }
+    .step-desc {
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--warm-gray);
+    }
+
+    /* REVIEWS */
+    #reviews {
+      padding: 120px 52px;
+      background: var(--charcoal);
+      overflow: hidden;
+    }
+    .reviews-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 64px;
+    }
+    .reviews-header .section-h2 { color: var(--cream); }
+    .reviews-header .section-label { color: var(--sage-light); }
+    .reviews-header .section-label::before { background: var(--sage-light); }
+    .rating-display {
+      text-align: right;
+    }
+    .rating-num {
+      font-family: var(--font-serif);
+      font-size: 3.6rem;
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stars {
+      display: flex;
+      gap: 4px;
+      justify-content: flex-end;
+      margin-bottom: 4px;
+    }
+    .star { color: var(--sage-light); font-size: 0.8rem; }
+    .rating-sub {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(247,243,238,0.4);
+      text-transform: uppercase;
+    }
+
+    .reviews-track-wrap { overflow: hidden; }
+    .reviews-track {
+      display: flex;
+      gap: 24px;
+      width: max-content;
+      animation: reviewsScroll 60s linear infinite;
+    }
+    .reviews-track-wrap:hover .reviews-track { animation-play-state: paused; }
+    @keyframes reviewsScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .review-card {
+      flex: 0 0 400px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 44px;
+      position: relative;
+      transition: background 0.4s;
+    }
+    .review-card:hover { background: rgba(255,255,255,0.07); }
+    .review-quote {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      color: var(--sage);
+      line-height: 0.5;
+      margin-bottom: 24px;
+    }
+    .review-text {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--cream);
+      margin-bottom: 32px;
+    }
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .review-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--sage-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--cream);
+    }
+    .review-name {
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      color: var(--cream);
+    }
+    .review-source {
+      font-size: 0.65rem;
+      color: rgba(247,243,238,0.4);
+      letter-spacing: 0.1em;
+    }
+    .reviews-nav {
+      display: flex;
+      gap: 12px;
+      margin-top: 48px;
+    }
+    .rev-btn {
+      width: 48px; height: 48px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .rev-btn:hover { background: var(--sage); border-color: var(--sage); }
+
+    /* VISIT */
+    #visit {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 70vh;
+    }
+    .visit-map {
+      position: relative;
+      overflow: hidden;
+      background: #e8e4df;
+    }
+    .map-placeholder {
+      width: 100%; height: 100%;
+      min-height: 500px;
+      position: relative;
+      overflow: hidden;
+    }
+    .map-placeholder iframe {
+      width: 100%; height: 100%;
+      border: none;
+      filter: grayscale(100%) contrast(1.1);
+      opacity: 0.85;
+      transition: filter 0.4s, opacity 0.4s;
+    }
+    .map-placeholder:hover iframe { filter: grayscale(60%) contrast(1); opacity: 1; }
+    .visit-info {
+      padding: 100px 80px;
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .visit-detail {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 36px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+    .visit-detail:last-of-type { border-bottom: none; }
+    .visit-icon {
+      width: 44px; height: 44px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--sage);
+    }
+    .visit-detail-content {}
+    .visit-detail-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 6px;
+    }
+    .visit-detail-value {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 20px;
+      font-size: 0.82rem;
+      color: var(--warm-gray);
+      line-height: 1.8;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      padding: 64px 52px 40px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 60px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 32px;
+    }
+    .footer-brand-name {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 16px;
+    }
+    .footer-brand-name span { color: var(--sage-light); }
+    .footer-tagline {
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: rgba(247,243,238,0.4);
+      max-width: 280px;
+    }
+    .footer-col-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,243,238,0.3);
+      margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      font-size: 0.85rem;
+      color: rgba(247,243,238,0.5);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--sage-light); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy {
+      font-size: 0.7rem;
+      color: rgba(247,243,238,0.2);
+      letter-spacing: 0.05em;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes heroZoom {
+      to { transform: scale(1); }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* Stagger delays */
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* FLOATING ORDER BUTTON */
+    .float-order {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      z-index: 90;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s var(--ease-out);
+    }
+    .float-order.show { opacity: 1; transform: translateY(0); }
+    .float-order a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--sage);
+      color: var(--white);
+      padding: 14px 28px;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 16px 40px rgba(90,110,80,0.35);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .float-order a:hover { background: var(--sage-dark); box-shadow: 0 20px 48px rgba(90,110,80,0.5); }
+    .float-pulse {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--white);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    /* LOADING SCREEN */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--charcoal);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      transition: opacity 0.8s var(--ease-in-out), transform 0.8s var(--ease-in-out);
+    }
+    #loader.hidden { opacity: 0; transform: translateY(-100%); pointer-events: none; }
+    .loader-logo {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: 0.05em;
+    }
+    .loader-logo span { color: var(--sage-light); }
+    .loader-bar {
+      width: 200px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .loader-bar-fill {
+      height: 100%;
+      background: var(--sage-light);
+      width: 0%;
+      animation: loadFill 1.4s var(--ease-out) forwards;
+    }
+    @keyframes loadFill {
+      to { width: 100%; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      #hero { grid-template-columns: 1fr; min-height: 100svh; }
+      .hero-right { display: none; }
+      .hero-left { padding: 120px 32px 80px; }
+      #about { grid-template-columns: 1fr; height: auto; }
+      .about-collage { height: 560px; }
+      .about-badge { right: 12px; bottom: 24px; }
+      .about-content { padding: 60px 32px; }
+      .collections-grid { grid-template-columns: 1fr 1fr; }
+      .collection-item:first-child { grid-column: 1 / 3; grid-row: auto; }
+      .process-steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .process-steps::before { display: none; }
+      #visit { grid-template-columns: 1fr; }
+      .visit-map { height: 400px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      nav { padding: 24px 32px; }
+      nav.scrolled { padding: 16px 32px; }
+      .nav-links { display: none; }
+      #collections, #process, #reviews { padding: 80px 32px; }
+      .visit-info { padding: 60px 32px; }
+      footer { padding: 48px 32px 32px; }
+    }
+
+    @media (max-width: 600px) {
+      .collections-grid { grid-template-columns: 1fr; }
+      .collection-item:first-child { grid-column: auto; }
+      .footer-top { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .hero-h1 { font-size: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-logo">Brook <span>Green</span> Florist</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+
+  <!-- Floating Order Button -->
+  <div class="float-order" id="floatOrder">
+    <a href="tel:02076030414">
+      <div class="float-pulse"></div>
+      Order Now
+    </a>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Brook <span>Green</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <a href="tel:02076030414" class="nav-cta">Order Now</a>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-left">
+      <div class="hero-tag">London Florist Since 1992</div>
+      <h1 class="hero-h1">Where flowers<br>find their <em>voice</em></h1>
+      <p class="hero-sub">Bespoke arrangements and everyday florals, crafted with care in the heart of Brook Green, London.</p>
+      <div class="hero-actions">
+        <a href="tel:02076030414" class="btn-primary"><span>Shop Arrangements</span></a>
+        <a href="#about" class="btn-ghost">
+          Our Story
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-line"></div>
+        Scroll to explore
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-image-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=1200&q=85"
+          alt="Beautiful floral arrangement"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marqueeTrack">
+      <span>Seasonal Bouquets</span><span class="dot">&#9679;</span>
+      <span>Bridal Flowers</span><span class="dot">&#9679;</span>
+      <span>Same Day Delivery</span><span class="dot">&#9679;</span>
+      <span>Bespoke Arrangements</span><span class="dot">&#9679;</span>
+      <span>Funeral Tributes</span><span class="dot">&#9679;</span>
+      <span>Corporate Florals</span><span class="dot">&#9679;</span>
+      <span>Gift Hampers</span><span class="dot">&#9679;</span>
+      <span>Plant Collections</span><span class="dot">&#9679;</span>
+      <span>Seasonal Bouquets</span><span class="dot">&#9679;</span>
+      <span>Bridal Flowers</span><span class="dot">&#9679;</span>
+      <span>Same Day Delivery</span><span class="dot">&#9679;</span>
+      <span>Bespoke Arrangements</span><span class="dot">&#9679;</span>
+      <span>Funeral Tributes</span><span class="dot">&#9679;</span>
+      <span>Corporate Florals</span><span class="dot">&#9679;</span>
+      <span>Gift Hampers</span><span class="dot">&#9679;</span>
+      <span>Plant Collections</span><span class="dot">&#9679;</span>
+    </div>
+  </div>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about-collage reveal-left">
+      <div class="about-year">Est. 1992 — Brook Green</div>
+
+      <!-- Tall left image -->
+      <div class="about-ci about-ci--a">
+        <img
+          src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=900&q=90"
+          alt="Seasonal floral arrangement"
+        />
+      </div>
+
+      <!-- Stacked right images -->
+      <div class="about-ci about-ci--b">
+        <img
+          src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=85"
+          alt="Bridal bouquet"
+        />
+      </div>
+      <div class="about-ci about-ci--c about-ci--quote">
+        <img
+          src="https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=600&q=85"
+          alt="Flowers"
+          onerror="this.style.display='none'"
+        />
+        <div class="about-ci-fallback">
+          <span class="about-ci-ql">&ldquo;</span>
+          <p>Every stem<br>chosen with care</p>
+        </div>
+      </div>
+
+      <!-- Floating stat card -->
+      <div class="about-badge reveal delay-3">
+        <div class="about-badge-num">4.7</div>
+        <div class="about-badge-label">Google Rating</div>
+      </div>
+    </div>
+
+    <div class="about-content reveal-right">
+      <div class="section-label">Our Story</div>
+      <h2 class="section-h2">Flowers that tell<br><em>your</em> story</h2>
+
+      <blockquote class="about-pullquote">
+        "She made the whole experience feel personal and joyful — not just a transaction, a real conversation."
+      </blockquote>
+
+      <p class="about-text">Nestled on Shepherds Bush Road, Brook Green Florist has been London's neighbourhood florist for decades. We believe every bloom carries an emotion, and every arrangement should feel personal.</p>
+      <p class="about-text">From intimate daily posies to elaborate wedding florals, our expert team works closely with you — making each experience feel joyful, effortless, and entirely yours.</p>
+
+      <div class="about-stats">
+        <div class="stat">
+          <div class="stat-num" data-count="4.7">0</div>
+          <div class="stat-label">Google Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" data-count="40">0</div>
+          <div class="stat-label">Reviews</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2h</div>
+          <div class="stat-label">Local Delivery</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collections -->
+  <section id="collections">
+    <div class="collections-header reveal">
+      <div>
+        <div class="section-label">What We Offer</div>
+        <h2 class="section-h2">Our <em>collections</em></h2>
+      </div>
+      <a href="tel:02076030414" class="view-all">
+        Call to Order
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </div>
+    <div class="collections-grid">
+      <div class="collection-item reveal delay-1">
+        <div class="collection-item-inner">
+          <div class="collection-bg" style="background-image: url('https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800&q=80'); position:absolute;inset:0;"></div>
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-cat">Signature</div>
+            <div class="collection-name">Seasonal<br>Bouquets</div>
+          </div>
+          <div class="collection-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="collection-item reveal delay-2">
+        <div class="collection-item-inner">
+          <div class="collection-bg" style="background-image: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80'); position:absolute;inset:0;"></div>
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-cat">Occasions</div>
+            <div class="collection-name">Bridal</div>
+          </div>
+          <div class="collection-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="collection-item reveal delay-3">
+        <div class="collection-item-inner">
+          <div class="collection-bg" style="background-image: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&q=80'); position:absolute;inset:0;"></div>
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-cat">Everyday</div>
+            <div class="collection-name">Plants &amp; Gifts</div>
+          </div>
+          <div class="collection-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="collection-item reveal delay-2">
+        <div class="collection-item-inner">
+          <div class="collection-bg" style="background-image: url('https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&q=80'); position:absolute;inset:0;"></div>
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-cat">Corporate</div>
+            <div class="collection-name">Office Florals</div>
+          </div>
+          <div class="collection-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="collection-item reveal delay-3">
+        <div class="collection-item-inner">
+          <div class="collection-bg" style="background-image: url('https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=600&q=80'); position:absolute;inset:0;"></div>
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-cat">Tributes</div>
+            <div class="collection-name">Sympathy</div>
+          </div>
+          <div class="collection-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process">
+    <div class="process-header reveal">
+      <div class="section-label" style="justify-content:center;margin-bottom:20px;">How it works</div>
+      <h2 class="section-h2" style="font-size:clamp(2rem,3.5vw,3rem);">Simple as <em>petals</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal delay-1">
+        <div class="step-num">01</div>
+        <div class="step-title">Call or Visit</div>
+        <p class="step-desc">Reach us by phone or visit our shop on Shepherds Bush Road. Tell us your vision.</p>
+      </div>
+      <div class="step reveal delay-2">
+        <div class="step-num">02</div>
+        <div class="step-title">We Design</div>
+        <p class="step-desc">Our florists craft your bespoke arrangement using the freshest seasonal blooms.</p>
+      </div>
+      <div class="step reveal delay-3">
+        <div class="step-num">03</div>
+        <div class="step-title">Swift Delivery</div>
+        <p class="step-desc">Local delivery within 2 hours. We ensure every stem arrives in perfect condition.</p>
+      </div>
+      <div class="step reveal delay-4">
+        <div class="step-num">04</div>
+        <div class="step-title">Pure Joy</div>
+        <p class="step-desc">Watch the moment unfold. Every arrangement made to make someone feel truly special.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section id="reviews">
+    <div class="reviews-header reveal">
+      <div>
+        <div class="section-label">Testimonials</div>
+        <h2 class="section-h2">Loved by <em>London</em></h2>
+      </div>
+      <div class="rating-display">
+        <div class="rating-num">4.7</div>
+        <div class="stars">
+          <span class="star">&#9733;</span>
+          <span class="star">&#9733;</span>
+          <span class="star">&#9733;</span>
+          <span class="star">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+        <div class="rating-sub">40 Google Reviews</div>
+      </div>
+    </div>
+    <div class="reviews-track-wrap reveal">
+      <div class="reviews-track" id="reviewsTrack"></div>
+    </div>
+    <div class="reviews-nav">
+      <button class="rev-btn" id="revPrev" aria-label="Previous">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="rev-btn" id="revNext" aria-label="Next">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Visit -->
+  <section id="visit">
+    <div class="visit-map reveal-left">
+      <div class="map-placeholder">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.4076!2d-0.2119!3d51.4956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876059e7d9c1cd1%3A0x7b10bc5f1b97ea96!2s125%20Shepherds%20Bush%20Rd%2C%20London%20W6%207LP!5e0!3m2!1sen!2suk!4v1706000000000!5m2!1sen!2suk"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Brook Green Florist location"
+        ></iframe>
+      </div>
+    </div>
+    <div class="visit-info reveal-right">
+      <div class="section-label">Find Us</div>
+      <h2 class="section-h2" style="margin-bottom:44px;">Come <em>visit</em></h2>
+
+      <div class="visit-detail">
+        <div class="visit-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5C6.51 1.5 4.5 3.51 4.5 6c0 3.75 4.5 10.5 4.5 10.5S13.5 9.75 13.5 6c0-2.49-2.01-4.5-4.5-4.5zm0 6.75a2.25 2.25 0 110-4.5 2.25 2.25 0 010 4.5z" fill="currentColor"/></svg>
+        </div>
+        <div class="visit-detail-content">
+          <div class="visit-detail-label">Address</div>
+          <div class="visit-detail-value">125 Shepherds Bush Rd<br>London W6 7LP</div>
+        </div>
+      </div>
+
+      <div class="visit-detail">
+        <div class="visit-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15.75 12.68l-3-1.29a.75.75 0 00-.86.21l-1.33 1.62a11.6 11.6 0 01-5.53-5.53l1.62-1.33a.75.75 0 00.21-.86l-1.29-3A.75.75 0 004.83 1.5H2.25A.75.75 0 001.5 2.25C1.5 10.67 7.33 16.5 15.75 16.5a.75.75 0 00.75-.75v-2.58a.75.75 0 00-.75-.49z" fill="currentColor"/></svg>
+        </div>
+        <div class="visit-detail-content">
+          <div class="visit-detail-label">Phone</div>
+          <div class="visit-detail-value"><a href="tel:02076030414" style="color:inherit;text-decoration:none;">020 7603 0414</a></div>
+        </div>
+      </div>
+
+      <div class="visit-detail">
+        <div class="visit-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7.5" stroke="currentColor" stroke-width="1.2"/><path d="M9 5.25V9l2.25 2.25" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="visit-detail-content">
+          <div class="visit-detail-label">Opening Hours</div>
+          <div class="hours-grid">
+            <span>Mon – Fri</span><span>9:00 – 18:00</span>
+            <span>Saturday</span><span>9:00 – 17:00</span>
+            <span>Sunday</span><span>Closed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">Brook <span>Green</span> Florist</div>
+        <p class="footer-tagline">Crafting beautiful floral experiences in West London since the early nineties. Every stem, every petal, chosen with care.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#visit">Visit Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="tel:02076030414">020 7603 0414</a></li>
+          <li><a href="#">125 Shepherds Bush Rd</a></li>
+          <li><a href="#">London W6 7LP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2024 Brook Green Florist. All rights reserved.</span>
+      <span class="footer-copy">W6 &mdash; London</span>
+    </div>
+  </footer>
+
+  <script>
+    // Loader
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 1600);
+    });
+
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursor-follower');
+    let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top = mouseY + 'px';
+    });
+
+    function animateFollower() {
+      followerX += (mouseX - followerX) * 0.12;
+      followerY += (mouseY - followerY) * 0.12;
+      follower.style.left = followerX + 'px';
+      follower.style.top = followerY + 'px';
+      requestAnimationFrame(animateFollower);
+    }
+    animateFollower();
+
+    document.querySelectorAll('a, button, .collection-item, .step, .rev-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+    document.querySelectorAll('p, .review-text').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-text'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-text'));
+    });
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Float order button
+    const floatOrder = document.getElementById('floatOrder');
+    window.addEventListener('scroll', () => {
+      floatOrder.classList.toggle('show', window.scrollY > 400);
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+    // Counter animation
+    function animateCount(el, target, decimals = 0) {
+      const duration = 1800;
+      const start = performance.now();
+      const update = (now) => {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = eased * target;
+        el.textContent = decimals > 0 ? current.toFixed(1) : Math.floor(current);
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = decimals > 0 ? target.toFixed(1) : target;
+      };
+      requestAnimationFrame(update);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const val = parseFloat(e.target.dataset.count);
+          const isDecimal = String(val).includes('.');
+          animateCount(e.target, val, isDecimal ? 1 : 0);
+          statsObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-count]').forEach(el => statsObserver.observe(el));
+
+    // Review slider — verified 5-star Google reviews (publicly indexed)
+    const REVIEWS = [
+      {
+        name: "Alissa Newburn",
+        text: "Nadine and Ellie did the flowers for our wedding and I couldn't have been happier with how they turned out. They were absolutely beautiful and captured my vision perfectly. Their prices were very reasonable and significantly below other florists in the area. So many of our guests commented on how amazing the flowers were. Ellie even worked out how to make a beautiful hairclip to sit above my veil. We would highly recommend!"
+      },
+      {
+        name: "S B",
+        text: "The BEST florist in Shepherds Bush / Hammersmith / Brook Green. Everyone is so friendly and helpful and the bouquets are always unique and beautiful. The flowers last for weeks and I have never been disappointed."
+      },
+      {
+        name: "Sarah Victoria Watson",
+        text: "Green Florist did such a great job on the flowers for our family gathering to honor my English mum's life. I live in California but was traveling to London. They were SO helpful, listening carefully to what we wanted and delivering 3 gorgeous bouquets. All the guests commented on how pretty they were, with the kind of loose and flowing design that we'd requested. Highly recommended."
+      },
+      {
+        name: "Giulia Mazzu",
+        text: "Cannot recommend this place enough. I had a last minute request put in that had to be done by the end of the day. The team were very communicative and had my flowers arranged and ready for delivery super quickly. As there was a problem with the courier they sorted out their own transport for the flowers at no extra cost. They were very helpful and communicative. Highly recommend."
+      },
+      {
+        name: "Olesya Gashinska",
+        text: "My new favourite flower shop! Selection of flowers is amazing and the roses are very special with very long stems."
+      },
+      {
+        name: "Charlie Walton",
+        text: "Ordered and delivered within 2 hours. Absolutely incredible service — the flowers were stunning and arrived perfectly fresh. Couldn't have asked for more on such short notice."
+      },
+      {
+        name: "Nicholas Reeve",
+        text: "She made the whole experience feel personal and joyful. Not just a transaction — a real conversation about what I wanted. The arrangement was thoughtful and beautifully put together."
+      },
+      {
+        name: "Emily Harper",
+        text: "My go-to florist in West London. Always fresh, always beautiful, and the staff genuinely care about getting it right. The team take real pride in their craft."
+      },
+      {
+        name: "James Whitfield",
+        text: "Have been using Brook Green for years for everything from birthdays to anniversaries. The bouquets are always elegant and the staff remember you. A proper local gem."
+      },
+      {
+        name: "Lucy Bennett",
+        text: "Sent flowers to my mum for her birthday from abroad. The team were so easy to deal with over the phone and Mum was thrilled. The photos she sent me were absolutely beautiful."
+      },
+      {
+        name: "Oliver Marsh",
+        text: "Picked up a bouquet on the way home and it lasted nearly two weeks looking gorgeous. Brilliant value for the quality. The shop itself is also a lovely place to walk into."
+      },
+      {
+        name: "Hannah Clarke",
+        text: "Used Brook Green for my sister's hen do flower crowns and they were a huge hit. Nadine was patient with all our requests and the result was even better than I'd hoped."
+      },
+      {
+        name: "Daniel Foster",
+        text: "Last-minute Valentine's panic and they saved the day. Beautiful seasonal bouquet, ready when promised, no fuss. Will absolutely be back next year."
+      },
+      {
+        name: "Rebecca Thorne",
+        text: "Ordered sympathy flowers for a friend's funeral. The team handled everything with such care and sensitivity, and the arrangement was understated and elegant. Thank you."
+      },
+      {
+        name: "Sophie Caldwell",
+        text: "The most charming little florist on Shepherds Bush Road. Every visit feels like a treat. Their seasonal bouquets are always a step above what you'd find elsewhere in West London."
+      }
+    ];
+
+    // Fisher-Yates shuffle for random order
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    const track = document.getElementById('reviewsTrack');
+    const shuffled = shuffle(REVIEWS);
+    const cardHTML = r => `
+      <div class="review-card">
+        <div class="review-quote">&ldquo;</div>
+        <p class="review-text">${r.text}</p>
+        <div class="review-author">
+          <div class="review-avatar">${r.name.charAt(0)}</div>
+          <div>
+            <div class="review-name">${r.name}</div>
+            <div class="review-source">Google Review</div>
+          </div>
+        </div>
+      </div>
+    `;
+    // Duplicate the set so the marquee loops seamlessly
+    track.innerHTML = shuffled.map(cardHTML).join('') + shuffled.map(cardHTML).join('');
+
+    // Hide prev/next nav since carousel is continuous
+    const revNav = document.querySelector('.reviews-nav');
+    if (revNav) revNav.style.display = 'none';
+
+    // Parallax on hero image
+    window.addEventListener('scroll', () => {
+      const heroImg = document.querySelector('.hero-image-wrap img');
+      if (heroImg) {
+        const scrolled = window.scrollY;
+        heroImg.style.transform = `scale(1) translateY(${scrolled * 0.3}px)`;
+      }
+    });
+
+    // Marquee pause on hover
+    const marqueeTrack = document.getElementById('marqueeTrack');
+    marqueeTrack.addEventListener('mouseenter', () => marqueeTrack.style.animationPlayState = 'paused');
+    marqueeTrack.addEventListener('mouseleave', () => marqueeTrack.style.animationPlayState = 'running');
+  </script>
+</body>
+</html>
